@@ -1,6 +1,7 @@
-import db from '../firebaseconfig'
+import { db, auth } from '../firebaseconfig'
 import { query, collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { useRef, useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 
 function Notes({ props }) {
@@ -8,8 +9,29 @@ function Notes({ props }) {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [notes, setNotes] = useState([...props])
+    const [usernotes, SetUserNotes] = useState([])
     const inputRef = useRef('')
     const textareaRef = useRef('')
+    const router = useRouter()
+
+    // const usernotes = []
+
+    useEffect(() => {
+
+        console.log(router.query.uid)
+        console.log(notes)
+        SetUserNotes([])
+        notes.forEach((element) => {
+            if (element.uid === router.query.uid) {
+                console.log(element)
+                SetUserNotes(usernotes => [...usernotes, element])
+                // console.log(usernotes);
+                // usernotes.push(element)
+            }
+        })
+
+        // console.log(usernotes)
+    }, [notes])
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -19,20 +41,22 @@ function Notes({ props }) {
 
         await setDoc(doc(db, 'Notes', docRef.id), {
             title: inputRef.current.value,
-            description: textareaRef.current.value
+            description: textareaRef.current.value,
+            uid: router.query.uid
         })
 
-        setNotes([...notes, { title: inputRef.current.value, description: textareaRef.current.value }])
+        setNotes([...notes, { title: inputRef.current.value, description: textareaRef.current.value, uid: router.query.uid }])
 
         inputRef.current.value = ''
         textareaRef.current.value = ''
 
     }
 
-    console.log(props)
+    console.log(usernotes)
     return (
         <div>
-            {notes.map((element) => {
+            {usernotes.map((element) => {
+
                 return (
                     <div key={element.id}>
                         <h1>{element.title}</h1>
@@ -57,6 +81,8 @@ export default Notes
 
 export async function getStaticProps() {
 
+
+
     const notes = []
     const q = query(collection(db, 'Notes'));
     const querySnapshot = await getDocs(q);
@@ -65,7 +91,8 @@ export async function getStaticProps() {
         notes.push({
             id: docRef.id,
             description: document.data().description,
-            title: document.data().title
+            title: document.data().title,
+            uid: document.data().uid
         })
     });
 

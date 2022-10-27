@@ -19,8 +19,9 @@ a {
   html {
     color-scheme: dark;
   }
-  body {
-    color: white;
-    background: black;
-  }
+}
+
+label {
+  font-family: "Raleway", sans-serif;
+  font-size: 11pt;
 }
