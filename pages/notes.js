@@ -2,6 +2,7 @@ import { db, auth } from '../firebaseconfig'
 import { query, collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import axios from 'axios'
 
 
 function Notes({ props }) {
@@ -15,6 +16,9 @@ function Notes({ props }) {
     const router = useRouter()
 
     // const usernotes = []
+
+    
+ 
 
     useEffect(() => {
 
@@ -79,26 +83,22 @@ function Notes({ props }) {
 
 export default Notes
 
-export async function getStaticProps() {
+export async function getServerSideProps(context) {
 
+    async function getNotes(userID) {
+        
+        const response = await axios.get(`http://ec2-44-203-130-80.compute-1.amazonaws.com:8080/${userID}/allNotes`)
+        return response.data
+        
+    }
 
+    const new_notes = await getNotes(context.query.uid)
+    console.log(new_notes)
 
-    const notes = []
-    const q = query(collection(db, 'Notes'));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((document) => {
-        const docRef = doc(collection(db, 'Notes'))
-        notes.push({
-            id: docRef.id,
-            description: document.data().description,
-            title: document.data().title,
-            uid: document.data().uid
-        })
-    });
 
     return {
         props: {
-            props: notes
+            props: new_notes.documents
         }
     }
 }
