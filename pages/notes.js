@@ -3,6 +3,7 @@ import { query, collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { useRef, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
+import Card from 'react-bootstrap/Card';
 
 
 function Notes({ props }) {
@@ -63,9 +64,12 @@ function Notes({ props }) {
 
                 return (
                     <div key={element.id}>
-                        <h1>{element.title}</h1>
-                        <h1>{element.description}</h1>
-                        <hr></hr>
+                        <Card style={{ width: '18rem' }}>
+                            <Card.Body>
+                                <Card.Title>{element.title}</Card.Title>
+                                <Card.Text>{element.description}</Card.Text>
+                            </Card.Body>
+                        </Card>
                     </div>
                 )
             })}
@@ -87,7 +91,7 @@ export async function getServerSideProps(context) {
 
     async function getNotes(userID) {
         
-        const response = await axios.get(`http://ec2-44-203-130-80.compute-1.amazonaws.com:8080/${userID}/allNotes`)
+        const response = await axios.get(`http://ec2-54-204-67-9.compute-1.amazonaws.com:8080/${userID}/allNotes`)
         return response.data
         
     }
