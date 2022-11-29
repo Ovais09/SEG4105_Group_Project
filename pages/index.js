@@ -6,7 +6,7 @@ import { db, auth } from '../firebaseconfig'
 import { useRouter } from 'next/router'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import styles from '../styles/Index.module.css'
 
 
 export default function Home() {
@@ -65,10 +65,10 @@ export default function Home() {
       
       <div>
         <label htmlFor="user-email" style={{ paddingTop: "13px", fontFamily: "Raleway", fontSize: '11px' }}> &nbsp; Email</label>
-        <input className="form-content" type="email" name="email" autocomplete="on" id="user-email" placeholder="name@example.com" onChange={(e) => setEmail(e.target.value)} required />
+        <input className = {styles.a} type="email" name="email" autocomplete="on" id="user-email" placeholder="name@example.com" onChange={(e) => setEmail(e.target.value)} required />
         <div className="form-border"></div>
         <label htmlFor="user-password" style={{ paddingTop: "22px", fontFamily: "Raleway", fontSize: '11px' }}>&nbsp; Password</label>
-        <input id="user-password" className="form-content" type="password" name="password" onChange={(e) => setPassword(e.target.value)} required placeholder="Password" />
+        <input id="user-password" className = {styles.a} type="password" name="password" onChange={(e) => setPassword(e.target.value)} required placeholder="Password" />
        
         
 
@@ -76,7 +76,7 @@ export default function Home() {
         <br></br>
         <br></br>
 
-        <button onClick={handleSigninClick} className="btn btn-primary">Sign in</button>
+        <button onClick={handleSigninClick} className= {styles.b}>Sign in</button>
 
         <br />
         <br />
@@ -85,7 +85,7 @@ export default function Home() {
 
 
 
-      <button onClick={handleClickRegister} className="btn btn-primary">Register</button>
+      <button onClick={handleClickRegister} className={styles.b}>Register</button>
       </div>
   )
 }
