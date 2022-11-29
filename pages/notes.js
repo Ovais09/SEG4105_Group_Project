@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import Card from 'react-bootstrap/Card';
 
+const url = 'http://ec2-54-204-67-9.compute-1.amazonaws.com:8080'
 
 function Notes({ props }) {
 
@@ -18,8 +19,8 @@ function Notes({ props }) {
 
     // const usernotes = []
 
-    
- 
+
+
 
     useEffect(() => {
 
@@ -39,16 +40,31 @@ function Notes({ props }) {
     }, [notes])
 
     async function handleSubmit(event) {
+
+        async function addNotes(userID) {
+            const response = axios.post(`${url}/${userID}/addNote`, {
+                title: inputRef.current.value,
+                description: textareaRef.current.value
+            })
+
+            return response.data
+
+        }
+
+
+
         event.preventDefault();
-        const docRef = doc(collection(db, 'Notes'))
+        // const docRef = doc(collection(db, 'Notes'))
 
         console.log(title, description)
 
-        await setDoc(doc(db, 'Notes', docRef.id), {
-            title: inputRef.current.value,
-            description: textareaRef.current.value,
-            uid: router.query.uid
-        })
+        // await setDoc(doc(db, 'Notes', docRef.id), {
+        //     title: inputRef.current.value,
+        //     description: textareaRef.current.value,
+        //     uid: router.query.uid
+        // })
+
+        addNotes(router.query.uid)
 
         setNotes([...notes, { title: inputRef.current.value, description: textareaRef.current.value, uid: router.query.uid }])
 
@@ -57,7 +73,7 @@ function Notes({ props }) {
 
     }
 
-    console.log(usernotes)
+    // console.log(usernotes)
     return (
         <div>
             {usernotes.map((element) => {
@@ -90,11 +106,13 @@ export default Notes
 export async function getServerSideProps(context) {
 
     async function getNotes(userID) {
-        
-        const response = await axios.get(`http://ec2-54-204-67-9.compute-1.amazonaws.com:8080/${userID}/allNotes`)
+
+        const response = await axios.get(`${url}/${userID}/allNotes`)
         return response.data
-        
+
     }
+
+
 
     const new_notes = await getNotes(context.query.uid)
     console.log(new_notes)
