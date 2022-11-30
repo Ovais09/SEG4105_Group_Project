@@ -86,6 +86,8 @@ export default function Home() {
 
 
       <button onClick={handleClickRegister} className={styles.b}>Register</button>
-      </div>
+      <p>test</p>
+    </div>
+    
   )
 }

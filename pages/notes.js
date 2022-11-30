@@ -5,8 +5,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import Card from 'react-bootstrap/Card';
 
-const url = 'http://ec2-54-204-67-9.compute-1.amazonaws.com:8080'
-
+const url = 'http://ec2-3-83-80-59.compute-1.amazonaws.com:8080'
 function Notes({ props }) {
 
     const [title, setTitle] = useState('')
