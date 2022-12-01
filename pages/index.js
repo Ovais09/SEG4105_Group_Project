@@ -14,14 +14,16 @@ export default function Home() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [userId, setUserId] = useState('')
 
   const handleClickRegister = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user.uid
+        setUserId(user)
         console.log(user);
-        router.push('/notes');
+        // router.push('/notes');
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -65,7 +67,7 @@ export default function Home() {
       
       <div>
         <label htmlFor="user-email" style={{ paddingTop: "13px", fontFamily: "Raleway", fontSize: '11px' }}> &nbsp; Email</label>
-        <input className = {styles.a} type="email" name="email" autocomplete="on" id="user-email" placeholder="name@example.com" onChange={(e) => setEmail(e.target.value)} required />
+        <input className = {styles.a} type="email" name="email" autoComplete="on" id="user-email" placeholder="name@example.com" onChange={(e) => setEmail(e.target.value)} required />
         <div className="form-border"></div>
         <label htmlFor="user-password" style={{ paddingTop: "22px", fontFamily: "Raleway", fontSize: '11px' }}>&nbsp; Password</label>
         <input id="user-password" className = {styles.a} type="password" name="password" onChange={(e) => setPassword(e.target.value)} required placeholder="Password" />
@@ -86,7 +88,8 @@ export default function Home() {
 
 
       <button onClick={handleClickRegister} className={styles.b}>Register</button>
-      <p>test</p>
+      
+      {userId.length > 0 ? <p>Your user Id is {userId}</p> : <p></p>}
     </div>
     
   )
